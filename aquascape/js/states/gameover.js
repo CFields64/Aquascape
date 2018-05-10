@@ -3,12 +3,11 @@
 var GameOver = function(game) {};
 GameOver.prototype = {
 	preload: function() {
-		console.log('GameOver; preload');
+		console.log('GameOver: preload');
 	},
 
 	create: function() {
 		console.log('GameOver: create');
-		game.state.start('Load');
 	},
 
 	update: function() {}
