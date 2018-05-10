@@ -2,7 +2,7 @@
 
 var Shallows = function(game) {};
 
-var map, mapLayer, player;
+var map, mapLayer, player, box;
 
 Shallows.prototype = {
 	preload: function() {
@@ -17,7 +17,10 @@ Shallows.prototype = {
 
 		// Create a new tilemap object for Shallows.
 		map = game.add.tilemap('shallows');
-		map.addTilesetImage('');
+		map.addTilesetImage('Backdrop', 'shallowsheet5');
+		map.addTilesetImage('Decoration', 'shallowsheet8');
+		map.addTilesetImage('BlueSand', 'shallowsheet7');
+		//map.addTilesetImage('Rockywalls', '')
 
 		map.setCollisionByExclusion([]);
 
@@ -25,7 +28,10 @@ Shallows.prototype = {
 		mapLayer.resizeWorld();
 
 		// Create the player.
-		player = new Player(game, 32, 32, 'atlas', 'prawn');
+		player = new Player(game, 180, game.world.height - 180, 'atlas', 'prawn');
+
+		// Create the box.
+		box = new Box(game, 45, 45, 'atlas', 'box');
 
 	},
 

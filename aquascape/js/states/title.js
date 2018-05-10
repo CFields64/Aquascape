@@ -24,6 +24,8 @@ Title.prototype = {
 
 		//titlescreen = game.add.sprite(game.world.centerX, game.world.centerY, 'titlescreen');
 		//titlescreen.anchor.set(0.5);
+
+		game.state.start('Shallows');
 		
 	},
 
