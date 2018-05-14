@@ -8,7 +8,14 @@ GameOver.prototype = {
 
 	create: function() {
 		console.log('GameOver: create');
+
+		var gameOverText = game.add.text(game.width/2, game.height/2,  'Demo Complete: Press R to Restart.', {fontSize: '32px', fill: '#fff'});
+		gameOverText.anchor.set(0.5);
 	},
 
-	update: function() {}
+	update: function() {
+		if (this.input.keyboard.isDown(Phaser.Keyboard.R)) {
+			game.state.start('Title');
+		}
+	}
 }

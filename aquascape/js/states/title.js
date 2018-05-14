@@ -25,12 +25,15 @@ Title.prototype = {
 		//titlescreen = game.add.sprite(game.world.centerX, game.world.centerY, 'titlescreen');
 		//titlescreen.anchor.set(0.5);
 
-		game.state.start('Shallows');
+		var titleText = game.add.text(game.width/2, game.height/2,  'Aquascape Demo: WSAD to move, Space to start.', {fontSize: '32px', fill: '#fff'});
+		titleText.anchor.set(0.5);
 		
 	},
 
 	update: function(game) {
-
+		if (this.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
+			game.state.start('Shallows');
+		}
 	},
 
 	createButton: function(game, string, x, y, w, h, callback) {

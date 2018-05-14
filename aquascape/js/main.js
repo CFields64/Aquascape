@@ -1,9 +1,10 @@
 // Aquascape Main function
 
 var game;
+var settings;
 
 window.onload = function() {
-	game = new Phaser.Game(800, 600, Phaser.AUTO);
+	game = new Phaser.Game(1000, 800, Phaser.AUTO);
 	game.state.add('Boot', Boot);
 	game.state.add('Load', Load);
 	game.state.add('Title', Title);

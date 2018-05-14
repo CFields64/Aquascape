@@ -10,21 +10,18 @@ Load.prototype = {
 		//this.load.image('button', 'assets/img/button.png');
 
 		// Loads assets for rendering the first level.
-		game.load.tilemap('shallows', 'assets/img/shallowsArea1.json', null, Phaser.Tilemap.TILED_JSON);
-		game.load.spritesheet('shallowsheet1', 'assets/img/extrawall1.png', 32, 32);
-		game.load.spritesheet('shallowsheet2', 'assets/img/extrawall2.png', 32, 32);
-		game.load.spritesheet('shallowsheet3', 'assets/img/extrawall3.png', 32, 32);
-		game.load.spritesheet('shallowsheet4', 'assets/img/extrawall4.png', 32, 32);
-		game.load.spritesheet('shallowsheet5', 'assets/img/offBackdrop.png', 32, 32);
-		game.load.spritesheet('shallowsheet6', 'assets/img/blackseaWallRight.png', 32, 32);
-		game.load.spritesheet('shallowsheet7', 'assets/img/Sandy.png', 32, 32);
-		game.load.spritesheet('shallowsheet8', 'assets/img/shallows.png', 32, 32);
+		game.load.tilemap('shallows', 'assets/img/shallowmap.json', null, Phaser.Tilemap.TILED_JSON);
+		game.load.spritesheet('shallowsheet', 'assets/img/shallowsheet.png', 32, 32);
 
-		// Loads player assets.
-		game.load.image('player', 'assets/img/prawn.png');
+		// Loads texture atlas.
+		game.load.atlas('atlas', 'assets/img/shallows.png', 'assets/img/shallows.json');
 
-		// Loads world object assets.
-		game.load.image('box', 'assets/img/SeaBlock2.png');
+		// Loads audio assets.
+		game.load.audio('lvl1start', ['assets/audio/lvl1_opener.wav']);
+		game.load.audio('lvl1', ['assets/audio/lvl1_main.wav']);
+		game.load.audio('win', ['assets/audio/level_complete.wav']);
+		game.load.audio('grab', ['assets/audio/grab.wav']);
+
 	},
 
 	create: function() {
