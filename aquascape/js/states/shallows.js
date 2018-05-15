@@ -2,7 +2,7 @@
 
 var Shallows = function(game) {};
 
-var map, mapLayer, player, box;
+var map, mapLayer, mapLayer2, mapLayer3, mapLayer4, player, box;
 
 Shallows.prototype = {
 	preload: function() {
@@ -20,17 +20,20 @@ Shallows.prototype = {
 
 		game.stage.backgroundColor = "3075c9";
 
-		/*/ Create a new tilemap object for Shallows.
+		 //Create a new tilemap object for Shallows.
 		map = game.add.tilemap('shallows');
-		map.addTilesetImage('blueSand', 'shallowsheet');
-		map.addTilesetImage('rockyWall', 'shallowsheet');
-		map.addTilesetImage('backdrop', 'shallowsheet');
-		map.addTilesetImage('Decoration', 'shallowsheet');
+		//('Tileset name, 'key')
+		map.addTilesetImage('shallowsSheet', 'shallowsheet');
 
 		map.setCollisionByExclusion([]);
+		//(tileset layer name)
+		mapLayer2 = map.createLayer('backDrop');
+		apLayer3 = map.createLayer('Decoration');
+		apLayer4 = map.createLayer('blueSand');
+		mapLayer = map.createLayer('collisionLayer');
 
-		mapLayer = map.createLayer('rockyWall');
-		mapLayer.resizeWorld(); */
+
+		mapLayer.resizeWorld(); 
 
 		// Create the player.
 		this.player = new Player(game, 180, game.world.height - 180);

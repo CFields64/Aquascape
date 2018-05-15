@@ -10,8 +10,8 @@ Load.prototype = {
 		//this.load.image('button', 'assets/img/button.png');
 
 		// Loads assets for rendering the first level.
-		game.load.tilemap('shallows', 'assets/img/shallowmap.json', null, Phaser.Tilemap.TILED_JSON);
-		game.load.spritesheet('shallowsheet', 'assets/img/shallowsheet.png', 32, 32);
+		game.load.tilemap('shallows', 'assets/img/shallowsArea.json', null, Phaser.Tilemap.TILED_JSON);
+		game.load.spritesheet('shallowsheet', 'assets/img/shallowsSheet.png', 32, 32);
 
 		// Loads texture atlas.
 		game.load.atlas('atlas', 'assets/img/shallows.png', 'assets/img/shallows.json');
