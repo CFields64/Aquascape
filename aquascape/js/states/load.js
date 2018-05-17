@@ -14,7 +14,7 @@ Load.prototype = {
 		game.load.spritesheet('shallowsheet', 'assets/img/shallowsSheet.png', 32, 32);
 
 		// Loads texture atlas.
-		game.load.atlas('atlas', 'assets/img/shallows.png', 'assets/img/shallows.json');
+		game.load.atlas('atlas', 'assets/img/shallows2.png', 'assets/img/shallows2.json');
 
 		// Loads audio assets.
 		game.load.audio('lvl1start', ['assets/audio/lvl1_opener.wav']);
