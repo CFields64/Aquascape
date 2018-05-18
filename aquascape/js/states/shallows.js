@@ -80,14 +80,14 @@ Shallows.prototype = {
 		// Early return if gui has problems.
 		if (this.game.gui === undefined || this.game.gui === null) return;
 
-		if (settings.musicOn && !this.music.isPlaying) {
-			if (this.music.paused) {
-				this.music.resume();
+		if (settings.musicOn && !this.music1.isPlaying) {
+			if (this.music1.paused) {
+				this.music1.resume();
 			} else {
-				this.music.play();
+				this.music1.play();
 			}
-		} else if (!settings.musicOn && this.music.isPlaying) {
-			this.music.pause();
+		} else if (!settings.musicOn && this.music1.isPlaying) {
+			this.music1.pause();
 		}
 
 		if (settings.debugFps) {

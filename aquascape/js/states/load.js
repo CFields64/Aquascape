@@ -8,6 +8,11 @@ Load.prototype = {
 	preload: function() {
 		console.log('Load: preload');
 
+		// Displays team logo while other assets are loaded.
+		game.stage.backgroundColor = "fff";
+		logo = game.add.sprite(game.world.centerX, game.world.centerY, 'logo');
+		logo.anchor.set(0.5);
+
 		// Loads assets for title screen.
 		game.load.image('titlescreen', 'assets/img/AquascapeTitle.png');
 
@@ -31,10 +36,6 @@ Load.prototype = {
 
 	create: function() {
 		console.log('Load: create');
-
-		// Loads team logo while other assets are loaded.
-		logo = game.add.sprite(game.world.centerX, game.world.centerY, 'logo');
-		logo.anchor.set(0.5);
 
 		// Starts title screen state.
 		game.state.start('Title');
