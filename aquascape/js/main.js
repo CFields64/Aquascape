@@ -10,7 +10,6 @@ window.onload = function() {
 	game.state.add('Title', Title);
 	game.state.add('Shallows', Shallows);
 	game.state.add('Coral', Coral);
-	game.state.add('Jelly', Jelly);
 	game.state.add('Kelp', Kelp);
 	game.state.add('Ocean', Ocean);
 	game.state.add('GameOver', GameOver);

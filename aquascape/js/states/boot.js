@@ -4,6 +4,10 @@ var Boot = function(game) {};
 Boot.prototype = {
 	preload: function() {
 		console.log('Boot: preload');
+
+		// Load logo asset for load state.
+		game.load.image('logo', 'assets/img/Shinobu4.png');
+		
 	},
 
 	create: function() {
