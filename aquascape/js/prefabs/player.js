@@ -4,13 +4,17 @@
 
 function Player(game, xPos, yPos) {
 	// Call to Phaser.Sprite
-	Phaser.Sprite.call(this, game, xPos, yPos, 'atlas', 'prawn');
+	Phaser.Sprite.call(this, game, xPos, yPos, 'atlas', 'PrawnMoveForward00001');
 
 	// Animations
-
+	this.animations.add('PrawnMoveForward', Phaser.Animation.generateFrameNames('PrawnMoveForward',1,11,'',5),15,true);
+	this.animations.add('PrawnMoveUp', Phaser.Animation.generateFrameNames('PrawnMoveUp',1,11,'',5),15,true);
+	this.animations.add('PrawnMoveDown', Phaser.Animation.generateFrameNames('PrawnMoveDown',1,11,'',5),15,true);
+	this.animations.add('PrawnMoveIdle', Phaser.Animation.generateFrameNames('PrawnMoveIdle',1,11,'',5),15,true);
 	// Physics
 	this.facing = 'right';
-	this.scale.x = 1;
+	this.scale.x = 0.4;
+	this.scale.y = 0.4;
 	this.anchor.setTo(0.5, 0.5);
 	this.game.physics.arcade.enable(this);
 	//this.body.setSize(18, 36, 18, 15);
@@ -43,23 +47,61 @@ Player.prototype.update = function() {
 	// Physics
 	this.body.velocity.x = 0;
 	this.body.velocity.y = 0;
+	
 
-	if (this.keys.right.isDown) {
+	if (this.keys.left.isDown && this.keys.down.isDown) {
+		this.body.velocity.x = -this.xSpeed;
+		this.body.velocity.y = this.ySpeed;
+		this.facing = 'left';
+		this.scale.x = -0.4;
+		this.scale.y = 0.4;
+		this.animations.play('PrawnMoveDown');
+	} else if (this.keys.left.isDown && this.keys.up.isDown) {
+		this.body.velocity.x = -this.xSpeed;
+		this.body.velocity.y = -this.ySpeed;
+		this.facing = 'left';
+		this.scale.x = -0.4;
+		this.scale.y = 0.4;
+		this.animations.play('PrawnMoveUp');
+	} else if (this.keys.right.isDown && this.keys.up.isDown) {
+		this.body.velocity.x = this.xSpeed;
+		this.body.velocity.y = -this.ySpeed;
+		this.facing = 'right';
+		this.scale.x = 0.4;
+		this.scale.y = 0.4;
+		this.animations.play('PrawnMoveUp');
+	} else if (this.keys.right.isDown && this.keys.down.isDown) {
+		this.body.velocity.x = this.xSpeed;
+		this.body.velocity.y = this.ySpeed;
+		this.facing = 'right';
+		this.scale.x = 0.4;
+		this.scale.y = 0.4;
+		this.animations.play('PrawnMoveDown');
+	} else if (this.keys.right.isDown) {
 		this.body.velocity.x = this.xSpeed;
 		this.facing = 'right';
-		this.scale.x = 1;
+		this.animations.play('PrawnMoveForward');
+		this.scale.x = 0.4;
+		this.scale.y = 0.4;
 	} else if (this.keys.left.isDown) {
 		this.body.velocity.x = -this.xSpeed;
 		this.facing = 'left';
-		this.scale.x = -1;
+		this.scale.x = -0.4;
+		this.scale.y = 0.4;
+		this.animations.play('PrawnMoveForward');
 	} else if (this.keys.down.isDown) {
 		this.body.velocity.y = this.ySpeed;
+		this.animations.play('PrawnMoveDown');
 	} else if (this.keys.up.isDown) {
 		this.body.velocity.y = -this.ySpeed;
+		this.animations.play('PrawnMoveUp');
+	}else{
+		this.animations.play('PrawnMoveIdle');
 	}
 
 	if (this.keys.grab.justDown) {
 		this.grab();
+		
 	}
 };
 
