@@ -47,8 +47,37 @@ Player.prototype.update = function() {
 	// Physics
 	this.body.velocity.x = 0;
 	this.body.velocity.y = 0;
+	
 
-	if (this.keys.right.isDown) {
+	if (this.keys.left.isDown && this.keys.down.isDown) {
+		this.body.velocity.x = -this.xSpeed;
+		this.body.velocity.y = this.ySpeed;
+		this.facing = 'left';
+		this.scale.x = -0.4;
+		this.scale.y = 0.4;
+		this.animations.play('PrawnMoveDown');
+	} else if (this.keys.left.isDown && this.keys.up.isDown) {
+		this.body.velocity.x = -this.xSpeed;
+		this.body.velocity.y = -this.ySpeed;
+		this.facing = 'left';
+		this.scale.x = -0.4;
+		this.scale.y = 0.4;
+		this.animations.play('PrawnMoveUp');
+	} else if (this.keys.right.isDown && this.keys.up.isDown) {
+		this.body.velocity.x = this.xSpeed;
+		this.body.velocity.y = -this.ySpeed;
+		this.facing = 'right';
+		this.scale.x = 0.4;
+		this.scale.y = 0.4;
+		this.animations.play('PrawnMoveUp');
+	} else if (this.keys.right.isDown && this.keys.down.isDown) {
+		this.body.velocity.x = this.xSpeed;
+		this.body.velocity.y = this.ySpeed;
+		this.facing = 'right';
+		this.scale.x = 0.4;
+		this.scale.y = 0.4;
+		this.animations.play('PrawnMoveDown');
+	} else if (this.keys.right.isDown) {
 		this.body.velocity.x = this.xSpeed;
 		this.facing = 'right';
 		this.animations.play('PrawnMoveForward');
