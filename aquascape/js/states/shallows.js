@@ -28,12 +28,12 @@ Shallows.prototype = {
 		map.setCollisionByExclusion([]);
 		//(tileset layer name)
 		mapLayer2 = map.createLayer('backDrop');
-		apLayer3 = map.createLayer('Decoration');
-		apLayer4 = map.createLayer('blueSand');
+		mapLayer3 = map.createLayer('Decoration');
+		mapLayer4 = map.createLayer('blueSand');
 		mapLayer = map.createLayer('collisionLayer');
 
 
-		mapLayer.resizeWorld(); 
+		mapLayer.resizeWorld();
 
 		// Create the player.
 		this.player = new Player(game, 180, game.world.height - 180);
@@ -53,10 +53,10 @@ Shallows.prototype = {
 		this.game.add.existing(this.grate);
 
 		// Audio settings.
-		this.music = this.game.add.audio('lvl1', 0.5, true);
+		this.music1 = this.game.add.audio('lvl1', 0.5, true);
 		this.winSound = this.game.add.audio('win', 0.75, false);
 		if (settings.musicOn) {
-			this.music.play();
+			this.music1.play();
 		}
 	},
 
