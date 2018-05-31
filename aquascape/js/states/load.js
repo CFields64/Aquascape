@@ -17,7 +17,7 @@ Load.prototype = {
 		game.load.image('titlescreen', 'assets/img/AquascapeTitle.png');
 
 		// Loads assets for rendering the first level.
-		game.load.tilemap('shallows', 'assets/img/shallowsFinalVer.json', null, Phaser.Tilemap.TILED_JSON);
+		game.load.tilemap('shallows', 'assets/map/sandBox.json', null, Phaser.Tilemap.TILED_JSON);
 		game.load.spritesheet('shallowsheet', 'assets/img/shallowsTileSet1.png', 32, 32);
 
 		// Loads assets for rendering the second level.

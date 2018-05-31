@@ -2,7 +2,7 @@
 
 var Shallows = function(game) {};
 
-var map, mapLayer, mapLayer2, mapLayer3, mapLayer4, player, box;
+var map, mapLayer, mapLayer2, mapLayer3, mapLayer4, player, box, respawn;
 
 Shallows.prototype = {
 	preload: function() {
@@ -31,22 +31,27 @@ Shallows.prototype = {
 		this.map.addTilesetImage('shallowsTileSet1', 'shallowsheet');
 		console.log('Tilemap Loaded');
 
-		// Create all layers of the tilemap.
+		/*/ Create all layers of the tilemap.
 		for (let layer of this.map["layers"]) {
-			if (layer.name != 'Collision Layer') {
+			if (layer.name != 'Collision Layer' || layer.name != 'Object Layer') {
 				this.map.createLayer((layer.name));
 				console.log('Layer Created');
 			}
-		}
+		} */
 
 		this.collisionlayer = this.map.createLayer('Collision Layer');
 		console.log('Collision Layer Created');
 		//this.collisionLayer.resizeWorld();
 		this.map.setCollisionBetween(0, 256, true, this.collisionLayer);
 
+		this.objectLayer = this.map.createLayer('Object Layer');
+
 		//game.physics.p2.convertTilemap(map, this.collisionLayer);
 
 		game.physics.p2.setBoundsToWorld(true, true, true, true, false);
+
+		// Set up object groups.
+		respawn = game.add.group();
 
 		/*/ Set up collision groups for interactivity.
 		var playerCollisionGroup = game.physics.p2.createCollisionGroup();
@@ -55,40 +60,32 @@ Shallows.prototype = {
 		var grateCollisionGroup = game.physics.p2.createCollisionGroup(); */
 
 
-
-		var wallSpawn = map.createFromObjects('Object Layer 1', 32, '', 0, true, false);
-		var leverSpawn = map.createFromObjects('Object Layer 1', 36, '', 0, true, false);
-
-		// Creates spawn locations from Object Layer 2.
-
-		var spongeSpawn = map.createFromObjects('Object Layer 2', 40, '', 0, true, false);
-		var playerSpawn = map.createFromObjects('Object Layer 2', 20, '', 0, true, false);
-		var grateSpawn = map.createFromObjects('Object Layer 2', 41, '', 0, true, false);
-
 		// Create the player.
-		var playerSpawn = map.createFromObjects('Object Layer 1', 20, '', 0, true, false);
-		this.player = new Player(game, playerSpawn.x, PlayerSpawn.y);
+		this.map.createFromObjects('Object Layer', 1, '', 0, true, false, respawn);
+		this.player = new Player(game, 0, 0);
 		this.game.add.existing(this.player);
 		this.game.camera.follow(this.player);
 		console.log('Player Spawned');
 
+		this.spawn();
+
 		// Create the crab.
-		var crabSpawn = map.createFromObjects('Object Layer 1', 30, '', 0, true, false);
+		/*var crabSpawn = this.map.createFromObjects('Object Layer 1', 30, '', 0, true, false);
 		this.crab = new Crab(game, crabSpawn.x, crabSpawn.y);
 		this.game.add.existing(this.crab);
-		console.log('Crab Spawned');
+		console.log('Crab Spawned');*/
 
-		// Create the block.
-		var blockSpawn = map.createFromObjects('Object Layer 2', 39, '', 0, true, false);
+		/*/ Create the block.
+		var blockSpawn = this.map.createFromObjects('Object Layer', 2, '', 0, true, false);
 		this.block = new Box(game, blockSpawn.x, blockSpawn.y);
 		this.game.add.existing(this.block);
-		console.log('Block Spawned');
+		console.log('Block Spawned'); */
 
 		// Create the statue.
-		var statSpawn = map.createFromObjects('Object Layer 1', 31, '', 0, true, false);
+		/*var statSpawn = this.map.createFromObjects('Object Layer 1', 31, '', 0, true, false);
 		this.statue = new Statue(game, statSpawn.x, statSpawn.y);
 		this.game.add.existing(this.statue);
-		console.log('Statue Spawned');
+		console.log('Statue Spawned');*/
 
 		// Audio settings.
 		this.music1 = this.game.add.audio('lvl1', 0.5, true);
@@ -145,5 +142,14 @@ Shallows.prototype = {
 		this.statue.switchOn = true;
 		this.winSound.play();
 		game.time.events.add(Phaser.Timer.SECOND * 2, function() {game.state.start('GameOver')});
+	},
+
+	spawn: function() {
+
+		respawn.forEach(function(spawnPoint) {
+
+			player.reset(spawnPoint.x, spawnPoint.y);
+
+		}, this)
 	}
 };
