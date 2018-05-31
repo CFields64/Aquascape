@@ -5,15 +5,13 @@ function Box(game, xPos, yPos) {
 	Phaser.Sprite.call(this, game, xPos, yPos, 'atlas', 'box');
 
 	// Physics
-	this.scale.x = 1;
-	this.anchor.setTo(0.5, 0.5);
-	this.game.physics.arcade.enable(this);
-	//this.body.setSize(18, 36, 18, 15);
+	this.scale.x = 0.4;
+	this.scale.y = 0.4;
+	this.game.physics.p2.enable(this, true);
 	this.body.collideWorldBounds = true;
-	this.body.gravity.y = 500;
-	this.body.bounce = 1;
-	this.body.tilePadding.x = this.body.width;
-	this.body.tilePadding.y = this.body.height;
+	//this.body.setCollisionGroup(boxCollisionGroup);
+	//this.body.collides([playerCollisionGroup, boxCollisionGroup, statueCollisionGroup]);
+	this.body.gravity.y = 1000;
 }
 
 Box.prototype = Object.create(Phaser.Sprite.prototype);
@@ -21,7 +19,7 @@ Box.prototype.constructor = Box;
 
 Box.prototype.update = function() {
 	// Box update loop.
-	
+
 }
 
 function Statue(game, xPos, yPos) {
@@ -30,12 +28,8 @@ function Statue(game, xPos, yPos) {
 
 	// Physics
 	this.scale.x = 1;
-	this.anchor.setTo(0.5, 0.5);
-	this.game.physics.arcade.enable(this);
-	//this.body.setSize(18, 36, 18, 15);
-	this.body.immovable = true;
-	this.body.tilePadding.x = this.body.width;
-	this.body.tilePadding.y = this.body.height;
+	this.game.physics.p2.enable(this, true);
+	this.body.dynamic = false;
 
 	// Other attributes
 	this.switchOn = false;
@@ -51,7 +45,7 @@ Statue.prototype.update = function() {
 		if (settings.sfxOn) {
 			this.winSound.play();
 		}
-	}	
+	}
 }
 
 function Grate(game, xPos, yPos) {
@@ -60,20 +54,40 @@ function Grate(game, xPos, yPos) {
 
 	// Physics
 	this.scale.x = 1;
-	this.anchor.setTo(0.5, 0.5);
-	this.game.physics.arcade.enable(this);
+	this.game.physics.p2.enable(this, true);
 	this.body.collideWorldBounds = true;
-	//this.body.setSize(18, 36, 18, 15);
 	this.body.gravity.y = 0;
-	this.body.tilePadding.x = this.body.width;
-	this.body.tilePadding.y = this.body.height;
+	this.body.setCircle(140);
+	this.body.dynamic = false;
 
 	// Other attributes
 }
 
-Grate.prototype = Object.create(Phaser.Sprite.prototype);
-Grate.prototype.constructor = Grate;
+Grateopen.prototype = Object.create(Phaser.Sprite.prototype);
+Grateopen.prototype.constructor = Grateopen;
 
-Grate.prototype.update = function() {
+Grateopen.prototype.update = function() {
+	// Grateopen update loop.
+}
+
+function Grateopen(game, xPos, yPos) {
+	// Call to Phaser.Sprite
+	Phaser.Sprite.call(this, game, xPos, yPos, 'atlas', 'grate');
+
+	// Physics
+	this.scale.x = 1;
+	this.game.physics.p2.enable(this, true);
+	this.body.collideWorldBounds = true;
+	this.body.gravity.y = 0;
+	this.body.setCircle(140);
+	this.body.static = false;
+
+	// Other attributes
+}
+
+Grateopen.prototype = Object.create(Phaser.Sprite.prototype);
+Grateopen.prototype.constructor = Grateopen;
+
+Grateopen.prototype.update = function() {
 	// Grate update loop.
 }

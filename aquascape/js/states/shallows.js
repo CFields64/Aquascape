@@ -16,41 +16,79 @@ Shallows.prototype = {
 		this.game.debug.font = '9px Arial';
 
 		// Spin up physics.
-		game.physics.startSystem(Phaser.Physics.ARCADE);
+		game.physics.startSystem(Phaser.Physics.P2JS);
+		console.log('P2 Physics Active');
+
+		// Gravitay!
+		game.physics.p2.gravity.y = 1000;
+		console.log('Gravity is now 1000');
 
 		game.stage.backgroundColor = "3075c9";
 
 		 //Create a new tilemap object for Shallows.
-		map = game.add.tilemap('shallows');
+		this.map = game.add.tilemap('shallows');
 		//('Tileset name, 'key')
-		map.addTilesetImage('shallowsSheet', 'shallowsheet');
+		this.map.addTilesetImage('shallowsTileSet1', 'shallowsheet');
+		console.log('Tilemap Loaded');
 
-		map.setCollisionByExclusion([]);
-		//(tileset layer name)
-		mapLayer2 = map.createLayer('backDrop');
-		mapLayer3 = map.createLayer('Decoration');
-		mapLayer4 = map.createLayer('blueSand');
-		mapLayer = map.createLayer('collisionLayer');
+		// Create all layers of the tilemap.
+		for (let layer of this.map["layers"]) {
+			if (layer.name != 'Collision Layer') {
+				this.map.createLayer((layer.name));
+				console.log('Layer Created');
+			}
+		}
+
+		this.collisionlayer = this.map.createLayer('Collision Layer');
+		console.log('Collision Layer Created');
+		//this.collisionLayer.resizeWorld();
+		this.map.setCollisionBetween(0, 256, true, this.collisionLayer);
+
+		//game.physics.p2.convertTilemap(map, this.collisionLayer);
+
+		game.physics.p2.setBoundsToWorld(true, true, true, true, false);
+
+		/*/ Set up collision groups for interactivity.
+		var playerCollisionGroup = game.physics.p2.createCollisionGroup();
+		var boxCollisionGroup = game.physics.p2.createCollisionGroup();
+		var statueCollisionGroup = game.physics.p2.createCollisionGroup();
+		var grateCollisionGroup = game.physics.p2.createCollisionGroup(); */
 
 
-		mapLayer.resizeWorld();
+
+		var wallSpawn = map.createFromObjects('Object Layer 1', 32, '', 0, true, false);
+		var leverSpawn = map.createFromObjects('Object Layer 1', 36, '', 0, true, false);
+
+		// Creates spawn locations from Object Layer 2.
+
+		var spongeSpawn = map.createFromObjects('Object Layer 2', 40, '', 0, true, false);
+		var playerSpawn = map.createFromObjects('Object Layer 2', 20, '', 0, true, false);
+		var grateSpawn = map.createFromObjects('Object Layer 2', 41, '', 0, true, false);
 
 		// Create the player.
-		this.player = new Player(game, 180, game.world.height - 180);
+		var playerSpawn = map.createFromObjects('Object Layer 1', 20, '', 0, true, false);
+		this.player = new Player(game, playerSpawn.x, PlayerSpawn.y);
 		this.game.add.existing(this.player);
 		this.game.camera.follow(this.player);
+		console.log('Player Spawned');
 
-		// Create the box.
-		this.box = new Box(game, game.world.width/2 , 45, 'atlas', 'box');
-		this.game.add.existing(this.box);
+		// Create the crab.
+		var crabSpawn = map.createFromObjects('Object Layer 1', 30, '', 0, true, false);
+		this.crab = new Crab(game, crabSpawn.x, crabSpawn.y);
+		this.game.add.existing(this.crab);
+		console.log('Crab Spawned');
 
-		// Create the pedestal.
-		this.statue = new Statue(game, game.world.width - 180, game.world.height - 100);
+		// Create the block.
+		var blockSpawn = map.createFromObjects('Object Layer 2', 39, '', 0, true, false);
+		this.block = new Box(game, blockSpawn.x, blockSpawn.y);
+		this.game.add.existing(this.block);
+		console.log('Block Spawned');
+
+		// Create the statue.
+		var statSpawn = map.createFromObjects('Object Layer 1', 31, '', 0, true, false);
+		this.statue = new Statue(game, statSpawn.x, statSpawn.y);
 		this.game.add.existing(this.statue);
-
-		// Create the grate.
-		this.grate = new Grate(game, 150, 150);
-		this.game.add.existing(this.grate);
+		console.log('Statue Spawned');
 
 		// Audio settings.
 		this.music1 = this.game.add.audio('lvl1', 0.5, true);
@@ -61,21 +99,16 @@ Shallows.prototype = {
 	},
 
 	update: function() {
-		// Collision checks.
-		this.game.physics.arcade.collide(this.player, this.box);
-		this.game.physics.arcade.collide(this.player, this.statue);
-		this.game.physics.arcade.collide(this.box, this.statue, this.boxCollide, null, this);
-
 		// Dat.gui setting changes
 		this.player.xSpeed = settings.moveSpeed;
 		this.player.ySpeed = settings.moveSpeed;
-		this.player.body.gravity.y = settings.gravity;
+		game.physics.p2.gravity.y = settings.gravity.y;
 
-		if (this.statue.switchOn) {
+		/*if (this.statue.switchOn) {
 			this.grate.body.gravity.y = 500;
-		}
+		} */
 	},
-
+//
 	render: function() {
 		// Early return if gui has problems.
 		if (this.game.gui === undefined || this.game.gui === null) return;
@@ -95,8 +128,9 @@ Shallows.prototype = {
 		}
 		if (settings.debugBoundingBox) {
 			this.game.debug.body(this.player);
-			this.game.debug.body(this.box);
-			this.game.debug.body(this.statue);
+			//this.game.debug.body(this.box);
+			//this.game.debug.body(this.statue);
+			//this.game.debug.body(this.grate);
 		}
 		if (settings.debugPlayerBodyInfo) {
 			this.game.debug.bodyInfo(this.player, 16, 16);
