@@ -7,6 +7,7 @@ Boot.prototype = {
 
 		// Load logo asset for load state.
 		game.load.image('logo', 'assets/img/Shinobu4.png');
+		game.load.image('loading', 'assets/img/loading.png');
 
 	},
 
