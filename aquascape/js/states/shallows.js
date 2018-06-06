@@ -1,102 +1,187 @@
 // Aquascape Shallows state
 
 var Shallows = function(game) {};
-
-var map, mapLayer, mapLayer2, mapLayer3, mapLayer4, player, box;
-
 Shallows.prototype = {
 	preload: function() {
 		console.log('Shallows: preload');
+
 	},
 
 	create: function() {
 		console.log('Shallows: create');
 
-		this.game.time.advancedTiming = true;
-		this.game.debug.font = '9px Arial';
+		this.backdrop = game.add.sprite(0, 0, 'lvl1_backdrop');
 
 		// Spin up physics.
-		game.physics.startSystem(Phaser.Physics.ARCADE);
+		game.physics.startSystem(Phaser.Physics.P2JS);
+
+		// Loads Tilemap
+		this.map = game.add.tilemap('shallows');
+		this.map.addTilesetImage('shallowsTileSet1', 'shallowsheet');
+		console.log('Tilemap Loaded');
+
+		// Create all layers of the tilemap.
+		for (let layer of this.map["layers"]) {
+			if (layer.name != 'Collision Layer') {
+				this.map.createLayer((layer.name));
+				console.log('We creatin: ' + layer.name);
+			}
+		}
+
+		// Creates the collision layer of the tilemap.
+		this.collisionlayer = this.map.createLayer('Collision Layer');
+		console.log('We creatin: ' + this.collisionlayer.layer.name);
+
+		this.collisionlayer.resizeWorld();
+
+		this.map.setCollisionByExclusion([]);
+
+		game.physics.p2.convertTilemap(this.map, this.collisionlayer);
+
+		// Gravitay!
+		game.physics.p2.gravity.y = 1000;
 
 		game.stage.backgroundColor = "3075c9";
 
-		 //Create a new tilemap object for Shallows.
-		map = game.add.tilemap('shallows');
-		//('Tileset name, 'key')
-		map.addTilesetImage('shallowsSheet', 'shallowsheet');
+		game.physics.p2.setImpactEvents(true);
 
-		map.setCollisionByExclusion([]);
-		//(tileset layer name)
-		mapLayer2 = map.createLayer('backDrop');
-		mapLayer3 = map.createLayer('Decoration');
-		mapLayer4 = map.createLayer('blueSand');
-		mapLayer = map.createLayer('collisionLayer');
+		// Create collision groups for interactivity.
+		this.mapCollision = game.physics.p2.createCollisionGroup();
+		this.playerCollision = game.physics.p2.createCollisionGroup();
+		this.boxCollision = game.physics.p2.createCollisionGroup();
+		this.statueCollision = game.physics.p2.createCollisionGroup();
+		this.grateCollision = game.physics.p2.createCollisionGroup();
+		this.openCollision = game.physics.p2.createCollisionGroup();
+		this.spongeCollision = game.physics.p2.createCollisionGroup();
+		this.coralCollision = game.physics.p2.createCollisionGroup();
 
+		game.physics.p2.updateBoundsCollisionGroup();
 
-		mapLayer.resizeWorld();
+		for (var bodyIndex = 0; bodyIndex < this.map.layer.bodies.length; bodyIndex++) {
+			 var tileBody = this.map.layer.bodies[bodyIndex];
+			 tileBody.setCollisionGroup(this.mapCollision);
+			 tileBody.collides([this.playerCollision, this.boxCollision, this.grateCollision]);
+	 }
 
-		// Create the player.
-		this.player = new Player(game, 180, game.world.height - 180);
+		// Spawn player.
+		this.player = new Player(game, 148, 1375);
+		this.player.body.setCollisionGroup(this.playerCollision);
 		this.game.add.existing(this.player);
 		this.game.camera.follow(this.player);
 
-		// Create the box.
-		this.box = new Box(game, game.world.width/2 , 45, 'atlas', 'box');
+		// Spawn box.
+		this.box = new Box(game, 867, 1417);
+		this.box.body.setCollisionGroup(this.boxCollision);
 		this.game.add.existing(this.box);
 
-		// Create the pedestal.
-		this.statue = new Statue(game, game.world.width - 180, game.world.height - 100);
+		// Spawn statue.
+		this.statue = new Statue(game, 2069.54570947841, 1354.45877734156);
+		this.statue.body.setCollisionGroup(this.statueCollision);
 		this.game.add.existing(this.statue);
 
-		// Create the grate.
-		this.grate = new Grate(game, 150, 150);
-		this.game.add.existing(this.grate);
+		// Spawn Grate
+		this.grateExit = new Grate(game, 2588, 170);
+		this.grateExit.body.setCollisionGroup(this.grateCollision);
+		this.game.add.existing(this.grateExit);
 
-		// Audio settings.
-		this.music1 = this.game.add.audio('lvl1', 0.5, true);
-		this.winSound = this.game.add.audio('win', 0.75, false);
-		if (settings.musicOn) {
-			this.music1.play();
+		// Create the open greate to appear when gate opens.
+		this.openGrate = new Grateopen(game, 2588, 170);
+		this.openGrate.body.setCollisionGroup(this.openCollision);
+
+		// Calls for certain occurances when objects collide.
+
+		// Dynamic Objects:
+		// Player
+		this.player.body.collides(this.openCollision, this.advance, this);
+		this.player.body.collides(this.boxCollision, this.grab, this);
+		this.player.body.collides(this.coralCollision, this.break, this);
+		this.player.body.collides([this.mapCollision, this.statueCollision, this.grateCollision,
+			this.spongeCollision]);
+
+		// Box
+		this.box.body.collides(this.statueCollision, this.active, this);
+		this.box.body.collides([this.mapCollision, this.playerCollision, this.statueCollision,
+			this.grateCollision, this.spongeCollision, this.coralCollision]);
+
+		// Grate
+		this.grateExit.body.collides([this.playerCollision, this.mapCollision, this.statueCollision,
+			this.spongeCollision, this.coralCollision]);
+
+		// Static Objects:
+		// Statue
+		this.statue.body.collides([this.playerCollision, this.boxCollision, this.grateCollision]);
+
+		// Open Grate
+		this.openGrate.body.collides(this.playerCollision);
+
+		// Audio settings
+		this.lvl1 = this.game.add.audio('lvl1', 0.5, true);
+
+		this.lvl1.play();
+
+	},
+
+	advance: function() {
+		console.log('We leavin');
+		this.lvl1.stop();
+		game.state.start('Midroll');
+	},
+
+	grab: function(body1, body2) {
+
+		if (!this.player.isGrabbing) {
+			console.log('We grabbin');
+			this.player.grabSound.play();
+			this.constraint = game.physics.p2.createLockConstraint(body1, body2, [0, -55]);
+			this.player.isGrabbing = true;
+		}
+
+		// Drops the object if the player is grabbing it.
+		if (this.player.keys.grab.isDown && this.player.isGrabbing) {
+			console.log('We droppin');
+			game.physics.p2.removeConstraint(this.constraint);
+			this.player.isGrabbing = false;
+			console.log('Grab active');
 		}
 	},
 
-	update: function() {
-		// Collision checks.
-		this.game.physics.arcade.collide(this.player, this.box);
-		this.game.physics.arcade.collide(this.player, this.statue);
-		this.game.physics.arcade.collide(this.box, this.statue, this.boxCollide, null, this);
+	active: function() {
+		console.log('Statue active');
+		// If the player is holding the object kills the constraint.
+		if(this.constraint) {
+			game.physics.p2.removeConstraint(this.constraint);
+			this.player.isGrabbing = false;
+		}
 
-		// Dat.gui setting changes
-		this.player.xSpeed = settings.moveSpeed;
-		this.player.ySpeed = settings.moveSpeed;
-		this.player.body.gravity.y = settings.gravity;
+		this.box.destroy();
+		this.statue.switchOn = true;
+	},
+
+	break: function(body1, body2) {
+		console.log('We breakin');
+		body2.isAlive = false;
+	},
+
+	update: function() {
 
 		if (this.statue.switchOn) {
-			this.grate.body.gravity.y = 500;
+			this.game.add.existing(this.openGrate);
+			this.openGrate.sendToBack();
+			this.backdrop.sendToBack();
+			this.grateExit.body.static = false;
 		}
+
 	},
 
 	render: function() {
 		// Early return if gui has problems.
 		if (this.game.gui === undefined || this.game.gui === null) return;
 
-		if (settings.musicOn && !this.music1.isPlaying) {
-			if (this.music1.paused) {
-				this.music1.resume();
-			} else {
-				this.music1.play();
-			}
-		} else if (!settings.musicOn && this.music1.isPlaying) {
-			this.music1.pause();
-		}
-
 		if (settings.debugFps) {
 			this.game.debug.text('FPS: ' + game.time.fps, 16, 16, 'yellow');
 		}
 		if (settings.debugBoundingBox) {
 			this.game.debug.body(this.player);
-			this.game.debug.body(this.box);
-			this.game.debug.body(this.statue);
 		}
 		if (settings.debugPlayerBodyInfo) {
 			this.game.debug.bodyInfo(this.player, 16, 16);
@@ -105,11 +190,4 @@ Shallows.prototype = {
 			this.game.debug.cameraInfo(this.game.camera, 16, 16);
 		}
 	},
-
-	boxCollide: function() {
-		this.box.destroy();
-		this.statue.switchOn = true;
-		this.winSound.play();
-		game.time.events.add(Phaser.Timer.SECOND * 2, function() {game.state.start('GameOver')});
-	}
-};
+}
