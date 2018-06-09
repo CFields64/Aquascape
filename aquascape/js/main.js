@@ -13,6 +13,7 @@ window.onload = function() {
 	game.state.add('Shallows', Shallows);
 	game.state.add('Midroll', Midroll);
 	game.state.add('Coral', Coral);
+	game.state.add('Ocean', Ocean);
 	game.state.add('Credits', Credits);
 	game.state.start('Boot');
 }

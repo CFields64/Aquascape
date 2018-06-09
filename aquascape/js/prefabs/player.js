@@ -20,7 +20,7 @@ function Player(game, xPos, yPos) {
 	this.facing = 'right';
 	this.scale.x = 0.4;
 	this.scale.y = 0.4;
-	this.game.physics.p2.enable(this, true);
+	this.game.physics.p2.enable(this);
 	this.body.static = false;
 	this.body.collideWorldBounds = true;
 	this.body.clearShapes();
@@ -37,10 +37,13 @@ function Player(game, xPos, yPos) {
 	this.keys.up = this.game.input.keyboard.addKey(Phaser.Keyboard.W);
 	this.keys.down = this.game.input.keyboard.addKey(Phaser.Keyboard.S);
 	this.keys.grab = this.game.input.keyboard.addKey(Phaser.Keyboard.E);
-	this.keys.charge = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+	this.keys.smash = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
 	// Other mechanics
 	this.isGrabbing = false;
+	this.isCharging = false;
+
+	// SFX
 	this.grabSound = this.game.add.audio('grab', 0.75);
 
 }
@@ -159,58 +162,54 @@ Player.prototype.update = function() {
 		} else {
 			this.animations.play('PrawnGrab');
 		}
+	}
 
-		if (this.keys.charge.isDown) {
-			// Movement animations while charging.
-			if (this.keys.left.isDown && this.keys.down.isDown) {
-				this.body.velocity.x = -this.xSpeed;
-				this.body.velocity.y = this.ySpeed;
-				this.facing = 'left';
-				this.scale.x = -0.4;
-				this.scale.y = 0.4;
-				this.animations.play('PrawnSmash');
-			} else if (this.keys.left.isDown && this.keys.up.isDown) {
-				this.body.velocity.x = -this.xSpeed;
-				this.body.velocity.y = -this.ySpeed;
-				this.facing = 'left';
-				this.scale.x = -0.4;
-				this.scale.y = 0.4;
-				this.animations.play('PrawnSmash');
-			} else if (this.keys.right.isDown && this.keys.up.isDown) {
-				this.body.velocity.x = this.xSpeed;
-				this.body.velocity.y = -this.ySpeed;
-				this.facing = 'right';
-				this.scale.x = 0.4;
-				this.scale.y = 0.4;
-				this.animations.play('PrawnSmash');
-			} else if (this.keys.right.isDown && this.keys.down.isDown) {
-				this.body.velocity.x = this.xSpeed;
-				this.body.velocity.y = this.ySpeed;
-				this.facing = 'right';
-				this.scale.x = 0.4;
-				this.scale.y = 0.4;
-				this.animations.play('PrawnSmash');
-			} else if (this.keys.right.isDown) {
-				this.body.velocity.x = this.xSpeed;
-				this.facing = 'right';
-				this.animations.play('PrawnSmash');
-				this.scale.x = 0.4;
-				this.scale.y = 0.4;
-			} else if (this.keys.left.isDown) {
-				this.body.velocity.x = -this.xSpeed;
-				this.facing = 'left';
-				this.scale.x = -0.4;
-				this.scale.y = 0.4;
-				this.animations.play('PrawnSmash');
-			} else if (this.keys.down.isDown) {
-				this.body.velocity.y = this.ySpeed;
-				this.animations.play('PrawnSmash');
-			} else if (this.keys.up.isDown) {
-				this.body.velocity.y = -this.ySpeed;
-				this.animations.play('PrawnSmash');
-			} else {
-				this.animations.play('PrawnSmash');
-			}
+	if (this.keys.smash.isDown) {
+		console.log('We smashin');
+		this.isCharging = true;
+		this.animations.play('PrawnSmash');
+		if (this.keys.left.isDown && this.keys.down.isDown) {
+			this.body.velocity.x = -this.xSpeed;
+			this.body.velocity.y = this.ySpeed;
+			this.facing = 'left';
+			this.scale.x = -0.4;
+			this.scale.y = 0.4;
+		} else if (this.keys.left.isDown && this.keys.up.isDown) {
+			this.body.velocity.x = -this.xSpeed;
+			this.body.velocity.y = -this.ySpeed;
+			this.facing = 'left';
+			this.scale.x = -0.4;
+			this.scale.y = 0.4;
+		} else if (this.keys.right.isDown && this.keys.up.isDown) {
+			this.body.velocity.x = this.xSpeed;
+			this.body.velocity.y = -this.ySpeed;
+			this.facing = 'right';
+			this.scale.x = 0.4;
+			this.scale.y = 0.4;
+		} else if (this.keys.right.isDown && this.keys.down.isDown) {
+			this.body.velocity.x = this.xSpeed;
+			this.body.velocity.y = this.ySpeed;
+			this.facing = 'right';
+			this.scale.x = 0.4;
+			this.scale.y = 0.4;
+		} else if (this.keys.right.isDown) {
+			this.body.velocity.x = this.xSpeed;
+			this.facing = 'right';
+			this.scale.x = 0.4;
+			this.scale.y = 0.4;
+		} else if (this.keys.left.isDown) {
+			this.body.velocity.x = -this.xSpeed;
+			this.facing = 'left';
+			this.scale.x = -0.4;
+			this.scale.y = 0.4;
+		} else if (this.keys.down.isDown) {
+			this.body.velocity.y = this.ySpeed;
+		} else if (this.keys.up.isDown) {
+			this.body.velocity.y = -this.ySpeed;
 		}
+	}
+
+	if (!this.keys.smash.isDown) {
+		this.isCharging = false;
 	}
 };

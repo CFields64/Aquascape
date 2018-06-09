@@ -163,22 +163,4 @@ Sandbox.prototype = {
 		}
 
 	},
-
-	render: function() {
-		// Early return if gui has problems.
-		if (this.game.gui === undefined || this.game.gui === null) return;
-
-		if (settings.debugFps) {
-			this.game.debug.text('FPS: ' + game.time.fps, 16, 16, 'yellow');
-		}
-		if (settings.debugBoundingBox) {
-			this.game.debug.body(this.player);
-		}
-		if (settings.debugPlayerBodyInfo) {
-			this.game.debug.bodyInfo(this.player, 16, 16);
-		}
-		if (settings.debugCameraInfo) {
-			this.game.debug.cameraInfo(this.game.camera, 16, 16);
-		}
-	},
 }

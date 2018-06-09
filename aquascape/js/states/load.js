@@ -26,7 +26,8 @@ Load.prototype = {
 
 		// Loads assets for the first level.
 		game.load.image('lvl1_backdrop', 'assets/img/offBackdrop.png');
-		game.load.tilemap('shallows', 'assets/map/shallowsFinalVer.json', null, Phaser.Tilemap.TILED_JSON);
+		game.load.image('lvl1_decor', 'assets/img/shallowDecoration.png');
+		game.load.tilemap('shallows', 'assets/map/shallowsMap.json', null, Phaser.Tilemap.TILED_JSON);
 		game.load.spritesheet('shallowsheet', 'assets/map/shallowsTileSet1.png', 32, 32);
 
 		// Loads assets for the second level.
@@ -40,24 +41,26 @@ Load.prototype = {
 		game.load.atlas('staticAtlas', 'assets/img/stillSpritesheet.png', 'assets/img/stillSprites.json');
 
 		// Loads audio.
-		game.load.audio('title', ['assets/audio/opening_theme.mp3']);
-		game.load.audio('select', ['assets/audio/menu_select.wav']);
-		game.load.audio('cont', ['assets/audio/pause_menu.mp3']);
-		game.load.audio('lvl1', ['assets/audio/lvl1_main.wav']);
-		game.load.audio('lvl2', ['assets/audio/lvl2_theme2.mp3']);
-		game.load.audio('crab', ['assets/audio/hermit_crab.wav']);
-		game.load.audio('shark', ['assets/audio/shark.mp3']);
-		game.load.audio('shark2', ['assets/audio/shark_voice.mp3']);
-		game.load.audio('grab', ['assets/audio/grab.wav']);
-		game.load.audio('break', ['assets/audio/coral_break.wav']);
-		game.load.audio('bump', ['assets/audio/thud.mp3']);
+		game.load.audio('title', ['assets/audio/opening_theme.mp3', 'assets/audio/opening_theme.ogg']);
+		game.load.audio('select', ['assets/audio/menu_select.mp3', 'assets/audio/menu_select.ogg']);
+		game.load.audio('cont', ['assets/audio/pause_menu.mp3', 'assets/audio/pause_menu.ogg']);
+		game.load.audio('lvl1', ['assets/audio/lvl1_main.mp3', 'assets/audio/lvl1_main.ogg']);
+		game.load.audio('lvl2', ['assets/audio/lvl2_main.mp3', 'assets/audio/lvl2_main.ogg']);
+		game.load.audio('crab', ['assets/audio/crab.mp3', 'assets/audio/crab.ogg']);
+		game.load.audio('clown', ['assets/audio/clownfish.mp3', 'assets/audio/clownfish.ogg']);
+		game.load.audio('shark', ['assets/audio/shark_voice.mp3', 'assets/audio/shark_voice.ogg']);
+		game.load.audio('grab', ['assets/audio/grab.mp3', 'assets/audio/grab.ogg']);
+		game.load.audio('break', ['assets/audio/coral_break.mp3', 'assets/audio/coral_break.ogg']);
+		game.load.audio('lever', ['assets/audio/lever_pull.mp3', 'assets/audio/lever_pull.ogg']);
 
 		// Loads voice.
-		game.load.audio('mid_VO_1', ['assets/audio/where_am_i.mp3']);
-		game.load.audio('mid_VO_2', ['assets/audio/life.mp3']);
+		game.load.audio('mid_VO_1', ['assets/audio/where_am_i.mp3', 'assets/audio/where_am_i.ogg']);
+		game.load.audio('mid_VO_2', ['assets/audio/life.mp3', 'assets/audio/life.ogg']);
 
 		// Loads cutscenes.
 		game.load.video('intro', 'assets/video/Intro.mp4');
+		game.load.video('outro', 'assets/video/Outro.mp4');
+		game.load.video('credits', 'assets/video/Credits.mp4');
 
 	},
 

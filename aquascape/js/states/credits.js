@@ -13,7 +13,7 @@ Credits.prototype = {
 
 		this.credits.play();
 
-		this.credits.addToWorld(game.world.centerX, game.world.centerY, 0.5, 0.5, 1.4, 1.4);
+		this.credits.addToWorld(game.width/2, game.height/2, 0.5, 0.5, 1.4, 1.4);
 	},
 
 	update: function() {

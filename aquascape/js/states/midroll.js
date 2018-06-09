@@ -5,7 +5,6 @@ Midroll.prototype = {
 	preload: function() {
 		console.log('Midroll: preload');
 
-
 	},
 
 	create: function() {
@@ -15,11 +14,14 @@ Midroll.prototype = {
 
 		game.stage.backgroundColor = "000000";
 
-		this.prawn = this.add.sprite(0, game.world.height - 100, 'animatedAtlas', 'PrawnMoveForward00001');
+		this.prawn = this.add.sprite(game.world.width, game.world.height - 100, 'animatedAtlas', 'PrawnMoveForward00001');
 		this.prawn.anchor.set(0.5);
 		this.prawn.animations.add('PrawnMoveForward', Phaser.Animation.generateFrameNames('PrawnMoveForward',1,11,'',5),15,true);
 
-		var contText = game.add.text(game.width/2, game.height/2,  'Press Space to Continue.', {fontSize: '32px', fill: '#fff'});
+		var contText = game.add.text(game.width/2, game.height/2,  'Shall we continue?\nPress Spacebar when you are ready.',
+		{font: 'Acme',
+		fontSize: '40px',
+		fill: '#fff'});
 		contText.anchor.set(0.5);
 
 		// Audio settings.
